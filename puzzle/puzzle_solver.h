@@ -1,0 +1,4 @@
+#ifndef PUZZLE_SOLVER_H
+#define PUZZLE_SOLVER_H
+
+#endif // PUZZLE_SOLVER_H
