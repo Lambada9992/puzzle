@@ -3,8 +3,10 @@
 #include <iomanip>
 #include <cstdlib>
 #include <ctime>
+#include "PQ_lista.h"
 
 using namespace std;
+
 
 gra::gra(){
     int x=5;
@@ -197,6 +199,9 @@ void gra::print_menu(){
 void gra::play_game(){
     system("cls");
     print_tab();
+    AS W(tab,goal,size);
+    int pom;
+
     if(!solvable()){cout<<endl<<"nie da sie rozwiazac";
     }else{
         int czas=0;
@@ -209,12 +214,26 @@ void gra::play_game(){
             if(ruch=='s'){down_tab();}
             if(ruch=='a'){left_tab();}
             if(ruch=='d'){right_tab();}
-            if(ruch=='p'){}
+            if(ruch=='p'){
+clock_t start = clock();
+                W.status(tab,size);
+                pom=W.hint();
+                czas = clock() - start;
+                if(pom==2){up_tab();}
+                if(pom==3){down_tab();}
+                if(pom==0){left_tab();}
+                if(pom==1){right_tab();}
+                if(pom==5){cout<<"brak:"<<endl;}
+
+            }
             if(ruch=='r'){rand_tab();}
             system("cls");
+             printf( "Czas wykonywania: %lu ms\n",czas);
             print_tab();
             cout<<endl;
             print_menu();
+
+
         }
 
     }
