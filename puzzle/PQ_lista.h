@@ -26,7 +26,7 @@ public:
     void insert(astar*,int);
     astar *extract_min();
     astar *min();
-    void usun();
+
 };
 
 

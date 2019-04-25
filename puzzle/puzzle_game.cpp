@@ -216,7 +216,7 @@ void gra::play_game(){
             if(ruch=='d'){right_tab();}
             if(ruch=='p'){
 clock_t start = clock();
-                W.status(tab,size);
+                W.status(tab);
                 pom=W.hint();
                 czas = clock() - start;
                 if(pom==2){up_tab();}

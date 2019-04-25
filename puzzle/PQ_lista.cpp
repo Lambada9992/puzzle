@@ -14,8 +14,10 @@ lista::lista(astar *elem,int N){
 
 }
 lista::~lista(){
+
     delete next;
     delete down;
+    element=NULL;
 
 
 }
@@ -25,19 +27,16 @@ PQ_lista::PQ_lista(){
 }
 
 PQ_lista::~PQ_lista(){
-    lista *pom=H;
-
-    H=NULL;
-    delete pom;
+    delete H;
 }
 void PQ_lista::insert(astar *x,int N){
     if(H==NULL){
         H=new lista(x,N);
-        H->down=NULL;
+
 
     }
     else{
-        lista *pom=H;
+
         lista *pom2=new lista(x,N);
         if(H->key>N){
             pom2->down=H;
@@ -45,21 +44,24 @@ void PQ_lista::insert(astar *x,int N){
         }else{if(H->key==N){
                 pom2->next=H;
                 pom2->down=H->down;
+                H->down=NULL;
                 H=pom2;
             }
         else{
-
+            lista *pom=H;
             while(pom!=NULL){
 
                 if(pom->down==NULL){
                     pom->down=pom2;
+
                     break;
-                }////////////////////////////////////
+                }
 
                 if(pom->down->key==N){
 
                   pom2->next=pom->down;
                   pom2->down=pom->down->down;
+                  pom->down->down=NULL;
                   pom->down=pom2;
                   break;}
 
@@ -72,6 +74,10 @@ void PQ_lista::insert(astar *x,int N){
 
               pom=pom->down;
             }
+           // pom=NULL;
+            //delete pom;
+            //pom2=NULL;
+            //delete pom2;
         }
         }
     }
@@ -81,11 +87,9 @@ void PQ_lista::insert(astar *x,int N){
 astar *PQ_lista::extract_min(){
     lista*pom=H;
 
-
     if(H==NULL)return NULL;
     if(H->next==NULL){
         H=H->down;
-
         astar *pom2=pom->element;
         pom->element=NULL;
         pom->down=NULL;
@@ -107,10 +111,8 @@ astar *PQ_lista::extract_min(){
 }
 astar *PQ_lista::min(){
     if(H==NULL){return NULL;}else
-    {return H->element;}
+    {
+        return H->element;
+    }
 }
-void PQ_lista::usun(){
-    lista *pom=H;
-    H=NULL;
-    delete pom;
-}
+

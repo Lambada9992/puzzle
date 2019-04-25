@@ -163,7 +163,7 @@ delete podpowiedz;
 void AS::solve(){
     PQ_lista open;
     //PQ_lista closed;
-    astar ****hash_list=make_hash();
+    astar *****hash_list=make_hash();
 
 
 
@@ -187,11 +187,6 @@ void AS::solve(){
 
         X=open.extract_min();
 
-
-
-
-
-
         if(X->h==0){
             d1=NULL;d2=NULL;d3=NULL;d4=NULL;
             delete d1;delete d2;delete d3;delete d4; break;}
@@ -206,7 +201,6 @@ void AS::solve(){
             bool o1=child(d1,hash_list);
             if(o1){open.insert(d1,d1->f);
             add_hash(d1,hash_list);
-
             }
 
         }
@@ -254,13 +248,13 @@ void AS::solve(){
 
     X->next=NULL;
     delete X;
-    open.usun();
+
     delete_hash(hash_list);
 
 
 }
 
-bool AS::child(astar *&d, astar ****hash_list){
+bool AS::child(astar *&d, astar *****hash_list){
  if(!exist_hash(d,hash_list)){
        return true;
     }else{
@@ -307,7 +301,7 @@ int AS::hint(){
 
 
 }
-void AS::status(int **X, int N){
+void AS::status(int **X){
     if(!compare(X,tab)){
         for(int i=0;i<size;i++){
             for(int j=0;j<size;j++){
@@ -348,19 +342,23 @@ void AS::status(int **X, int N){
 
 
 
-astar ****AS::make_hash(){
-    astar**** tab=new astar***[((size+size)-1)*((size*size)-1)];
+astar *****AS::make_hash(){
+    astar***** tab=new astar****[((size+size)-1)*((size*size)-1)];
     for(int i=0;i<((size+size)-1)*((size*size)-1);i++){
-        tab[i]=new astar**[size];
+        tab[i]=new astar***[size];
         for(int j=0;j<size;j++){
-            tab[i][j]=new astar*[size];
+            tab[i][j]=new astar**[size];
+            for(int k=0;k<size;k++){
+                tab[i][j][k]=new astar*[size*size];
+            }
 
         }
     }
     for(int i=0;i<((size+size)-1)*((size*size)-1);i++){
         for(int j=0;j<size;j++){
             for(int k=0;k<size;k++){
-                tab[i][j][k]=NULL;
+                for(int l=0;l<size*size;l++){
+                tab[i][j][k][l]=NULL;}
             }
         }
     }
@@ -369,10 +367,13 @@ astar ****AS::make_hash(){
 }
 
 
-void AS::delete_hash(astar ****&tab){
+void AS::delete_hash(astar *****&tab){
     for(int i=0;i<((size+size)-1)*((size*size)-1);i++){
 
         for(int j=0;j<size;j++){
+            for(int k=0;k<size;k++){
+                delete [] tab[i][j][k];
+            }
             delete [] tab[i][j];
 
         }
@@ -382,27 +383,29 @@ void AS::delete_hash(astar ****&tab){
 }
 
 
-void AS::add_hash(astar *X,astar ****&tab){
+void AS::add_hash(astar *X,astar *****&tab){
     int i=X->h;
     int j=X->x;
     int k=X->y;
+    int l=X->tab[0][0];
 
-    if(tab[i][j][k]==NULL){
-        tab[i][j][k]=X;
+    if(tab[i][j][k][l]==NULL){
+        tab[i][j][k][l]=X;
     }else{
-        X->next=tab[i][j][k];
-        tab[i][j][k]=X;
+        X->next=tab[i][j][k][l];
+        tab[i][j][k][l]=X;
     }
 
 }
 
 
-bool AS::exist_hash(astar *X,astar ****&tab){
+bool AS::exist_hash(astar *X,astar *****&tab){
     int i=X->h;
     int j=X->x;
     int k=X->y;
-    if(tab[i][j][k]==NULL){return false;}
-    astar *pom=tab[i][j][k];
+    int l=X->tab[0][0];
+    if(tab[i][j][k][l]==NULL){return false;}
+    astar *pom=tab[i][j][k][l];
     while(pom!=NULL){
         if(pom->compare_tab(X)){return true;}
         pom=pom->next;

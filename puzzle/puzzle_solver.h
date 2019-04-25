@@ -53,17 +53,17 @@ public:
     ~AS();
 
     int hint();
-    void status(int **,int);
+    void status(int **);
 private:
     void zwracanie_wyniku(astar *);
     void solve();
-    bool child(astar *&,astar ****);
+    bool child(astar *&,astar *****);
     bool compare(int **,int **);
 
-    astar ****make_hash();
-    void delete_hash(astar ****&);
-    void add_hash(astar *,astar ****&);
-    bool exist_hash(astar *,astar ****&);
+    astar *****make_hash();
+    void delete_hash(astar *****&);
+    void add_hash(astar *,astar *****&);
+    bool exist_hash(astar *,astar *****&);
 
 
 
