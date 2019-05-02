@@ -2,7 +2,7 @@
 #include <iostream>
 #include <math.h>
 #include "PQ_lista.h"
-int ult=0;
+
 
 using namespace std;
 
@@ -37,8 +37,6 @@ astar::~astar(){
     }
 delete []tab;
 delete next;
-parent=NULL;
-delete parent;
 }
 
 
@@ -118,15 +116,13 @@ void astar::manhattan(int **goal){
     }
 bool astar::compare_tab(astar *goal){
     if(h!=goal->h)return false;
-    if(x!=goal->x)return false;
-    if(y!=goal->y)return false;
-    bool g_state=true;
     for(int i=0;i<size;i++){
         for(int j=0;j<size;j++){
-            if(tab[i][j]!=goal->tab[i][j]){g_state=false;break;}
+            if(tab[i][j]!=goal->tab[i][j]){return false;}
 
-        }if(g_state==false){break;}
-    }return g_state;
+        }
+    }
+    return true;
 }
 
 ///////////////////////////////AS///////////////////////////////////
@@ -161,35 +157,29 @@ delete podpowiedz;
 }
 
 void AS::solve(){
-    PQ_lista open;
-    //PQ_lista closed;
+
+    PQ_lista open;    
     astar *****hash_list=make_hash();
 
 
-
     astar *first=new astar(tab,size);
-
     first->g=0;
     first->manhattan(goal);
     first->f=first->g+first->h;
-
     open.insert(first,first->f);
     add_hash(first,hash_list);
-    first =NULL;
-    delete first;
+
 
     astar *X;
     astar *d1=NULL,*d2=NULL,*d3=NULL,*d4=NULL;
 
 
 
-    while(open.min()!=NULL){//ult++;if(ult==10)break;
+    while(open.min()!=NULL){
 
         X=open.extract_min();
 
-        if(X->h==0){
-            d1=NULL;d2=NULL;d3=NULL;d4=NULL;
-            delete d1;delete d2;delete d3;delete d4; break;}
+        if(X->h==0){ break;}
 
         if(X->check_left()){
             d1=new astar(X->tab,size,X);
@@ -242,13 +232,11 @@ void AS::solve(){
 
         }
 
+
     }
 
     zwracanie_wyniku(X);
-
-    X->next=NULL;
-    delete X;
-
+    open.usun();
     delete_hash(hash_list);
 
 
@@ -258,10 +246,8 @@ bool AS::child(astar *&d, astar *****hash_list){
  if(!exist_hash(d,hash_list)){
        return true;
     }else{
-     astar *pom=d;
-     pom->next=NULL;
-     delete pom;
-    return false;
+     delete d;
+     return false;
     }
 
 }
@@ -279,14 +265,14 @@ void AS::zwracanie_wyniku(astar *X){
 
 }
 bool AS::compare(int **tab2,int **tab1){
-    bool g_state=true;
+
     for(int i=0;i<size;i++){
         for(int j=0;j<size;j++){
-            if(tab1[i][j]!=tab2[i][j]){g_state=false;break;}
+            if(tab1[i][j]!=tab2[i][j]){return false;}
 
-        }if(g_state==false){break;}
+        }
     }
-    return g_state;
+    return true;
 }
 
 int AS::hint(){
@@ -339,8 +325,6 @@ void AS::status(int **X){
 
 
 /////////////////////hash list///////////////////////////
-
-
 
 astar *****AS::make_hash(){
     astar***** tab=new astar****[((size+size)-1)*((size*size)-1)];

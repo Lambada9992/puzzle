@@ -124,6 +124,7 @@ void gra::down_tab(){
 
 
 bool gra::solvable(){
+    return true;
     int *pom=new int [size*size];
     int ilosc_zmian=0;
     for(int i=0;i<size;i++){
@@ -227,7 +228,7 @@ clock_t start = clock();
 
             }
             if(ruch=='r'){rand_tab();}
-            system("cls");
+           system("cls");
              printf( "Czas wykonywania: %lu ms\n",czas);
             print_tab();
             cout<<endl;

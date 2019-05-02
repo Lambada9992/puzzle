@@ -5,114 +5,120 @@ using namespace std;
 
 ////////////STRUKTURA////////
 lista::lista(astar *elem,int N){
-    next=NULL;
-    down=NULL;
+    next=nullptr;
+    down=nullptr;
     key=N;
     element=elem;
 
 
 
 }
-lista::~lista(){
 
-    delete next;
-    delete down;
-    element=NULL;
-
-
-}
 ///////////////|PQ\/////////////
 PQ_lista::PQ_lista(){
-    H=NULL;
+    H=nullptr;
 }
 
-PQ_lista::~PQ_lista(){
-    delete H;
-}
+
 void PQ_lista::insert(astar *x,int N){
-    if(H==NULL){
+    if(H==nullptr){
         H=new lista(x,N);
-
-
-    }
+  }
     else{
 
-        lista *pom2=new lista(x,N);
+        lista *new_node=new lista(x,N);
         if(H->key>N){
-            pom2->down=H;
-            H=pom2;
+            new_node->down=H;
+            H=new_node;
         }else{if(H->key==N){
-                pom2->next=H;
-                pom2->down=H->down;
-                H->down=NULL;
-                H=pom2;
+                new_node->next=H;
+                new_node->down=H->down;
+                H->down=nullptr;
+                H=new_node;
             }
         else{
             lista *pom=H;
-            while(pom!=NULL){
+            while(pom!=nullptr){
 
-                if(pom->down==NULL){
-                    pom->down=pom2;
+                if(pom->down==nullptr){
+                    pom->down=new_node;
 
                     break;
                 }
 
                 if(pom->down->key==N){
 
-                  pom2->next=pom->down;
-                  pom2->down=pom->down->down;
-                  pom->down->down=NULL;
-                  pom->down=pom2;
+                  new_node->next=pom->down;
+                  new_node->down=pom->down->down;
+                  pom->down->down=nullptr;
+                  pom->down=new_node;
                   break;}
 
                 if(pom->down->key>N){
 
-                 pom2->down=pom->down;
-                 pom->down=pom2;
+                 new_node->down=pom->down;
+                 pom->down=new_node;
                  break;
                 }
 
               pom=pom->down;
             }
-           // pom=NULL;
-            //delete pom;
-            //pom2=NULL;
-            //delete pom2;
-        }
+
+            }
         }
     }
 
 
 }
 astar *PQ_lista::extract_min(){
+
+
+    if(H==nullptr)return nullptr;
     lista*pom=H;
 
-    if(H==NULL)return NULL;
-    if(H->next==NULL){
-        H=H->down;
-        astar *pom2=pom->element;
-        pom->element=NULL;
-        pom->down=NULL;
-        delete pom;
-
-        return pom2;
-    }
-    if(H->next!=NULL){
+    if(H->next!=nullptr){
         H->next->down=H->down;
         H=H->next;
-        pom->next=NULL;
-        pom->down=NULL;
+        pom->next=nullptr;
+        pom->down=nullptr;
         astar *pom2=pom->element;
-        pom->element=NULL;
         delete pom;
         return pom2;
     }
+    else{
+        H=H->down;
+        astar *pom2=pom->element;
+        pom->next=nullptr;
+        pom->down=nullptr;
+        delete pom;
+        return pom2;
+    }
+
 
 }
 astar *PQ_lista::min(){
-    if(H==NULL){return NULL;}else
-    {
+    if(H==nullptr){return nullptr;}else
+   {
         return H->element;
+   }
+}
+void PQ_lista::usun(){
+    if(H!=NULL){
+        lista *pom=H;
+        while(H!=NULL){
+            pom=H;
+            H=H->down;
+            usun_next(pom);
+
+        }
     }
 }
+void PQ_lista::usun_next(lista *&X){
+    lista *pom;
+    while (X!=NULL){
+        pom =X;
 
+        X=X->next;
+        delete pom;
+    }
+}
