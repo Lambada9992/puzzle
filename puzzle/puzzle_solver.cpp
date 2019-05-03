@@ -237,7 +237,9 @@ void AS::solve(){
 
     zwracanie_wyniku(X);
     open.usun();
+
     delete_hash(hash_list);
+
 
 
 }
@@ -352,10 +354,16 @@ astar *****AS::make_hash(){
 
 
 void AS::delete_hash(astar *****&tab){
+
+
+
     for(int i=0;i<((size+size)-1)*((size*size)-1);i++){
 
         for(int j=0;j<size;j++){
             for(int k=0;k<size;k++){
+                for(int l=0;l<size*size;l++){
+                    delete tab[i][j][k][l];
+                }
                 delete [] tab[i][j][k];
             }
             delete [] tab[i][j];
