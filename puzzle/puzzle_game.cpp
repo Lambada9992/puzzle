@@ -4,65 +4,67 @@
 #include <cstdlib>
 #include <ctime>
 #include "PQ_lista.h"
+#include <fstream>
 
 using namespace std;
 
 
 gra::gra(){
-    int x=5;
-    while(x>4 or x<2){
-        cout<<"Podaj rozmiar gry <2;4> : ";
-        cin>>x;
-        system("cls");
-    }
-    size=x;
-    //size=3;
-    tab= new int *[size];
-    goal=new int *[size];
-    for(int i=0;i<size;i++){
-        tab[i]=new int [size];
-        goal[i]=new int [size];
-    }
-    wczytaj_tab();
+  W=NULL;
+  size=0;
+  tab=NULL;
+  goal=NULL;
+
 
 }
 
 gra::~gra(){
+
     for(int i=0;i<size;i++){
         delete []tab[i];
         delete []goal[i];
     }
     delete []tab;
     delete []goal;
+
+    delete W;
 }
 
-void gra::wczytaj_tab(){
-
-    system("cls");
-    int pom;
-
-    cout<<"wpisz tablice ("<<size<<"x"<<size<<") - 0 to puste pole :";
-    for(int i=0;i<size;i++){
-        for(int j=0;j<size;j++){
-            cin>>pom;
-            tab[i][j]=pom;
-            if(pom==0){x=i;y=j;}
+void gra::wczytaj_tab(int **tablica,int N){
+    if(size!=0){
+        for(int i=0;i<size;i++){
+            delete tab[i];
+            delete goal[i];
         }
+         delete []tab;
+         delete []goal;
+         delete W;
+
     }
 
-
-    //goal
-    pom=1;
+        size=N;
+        tab=new int*[size];
+        goal=new int*[size];
         for(int i=0;i<size;i++){
             for(int j=0;j<size;j++){
-               goal[i][j]=pom;
-               pom++;
+                tab[i]=new int[size];
+                goal[i]=new int[size];
             }
         }
+        int counter=1;
+        for(int i=0;i<size;i++){
+            for(int j=0;j<size;j++){
+                tab[i][j]=tablica[i][j];
+                if(tab[i][j]==0){x=i;y=j;}
+                goal[i][j]=counter;
+                counter++;
+            }
+
+        }
         goal[size-1][size-1]=0;
-        system("cls");
-
-
+        if(solvable()){
+            W=new AS(tab,goal,size);
+        }
 
 }
 
@@ -86,45 +88,61 @@ void gra::where_is_blank(){
 
 
 void gra::left_tab(){
-
-    if(y>0){
-    int pom=tab[x][y];
-    tab[x][y]=tab[x][y-1];
-    tab[x][y-1]=pom;
-    y--;
+    if(size!=0){if(is==true){
+            if(y>0){
+                int pom=tab[x][y];
+                tab[x][y]=tab[x][y-1];
+                tab[x][y-1]=pom;
+                y--;
+            }
+        }
     }
+
 }
 
 void gra::right_tab(){
-
+ if(size!=0){if(is==true){
     if(y<size-1){
     int pom=tab[x][y];
     tab[x][y]=tab[x][y+1];
     tab[x][y+1]=pom;
     y++;}
+     }}
 }
 
 void gra::up_tab(){
-
+ if(size!=0){if(is==true){
     if(x>0){
     int pom=tab[x][y];
     tab[x][y]=tab[x-1][y];
     tab[x-1][y]=pom;
     x--;}
+     }}
 }
 
 void gra::down_tab(){
-
+ if(size!=0){if(is==true){
     if(x<size-1){
     int pom=tab[x][y];
     tab[x][y]=tab[x+1][y];
     tab[x+1][y]=pom;
     x++;}
+     }}
 }
 
+void gra::hint_tab(){
+    if(W!=NULL){
+    W->status(tab);
+    int pom=W->hint();
+    if(pom==2){up_tab();}
+    if(pom==3){down_tab();}
+    if(pom==0){left_tab();}
+    if(pom==1){right_tab();}
+    }
+}
 
 bool gra::solvable(){
-    return true;
+
     int *pom=new int [size*size];
     int ilosc_zmian=0;
     for(int i=0;i<size;i++){
@@ -141,21 +159,24 @@ bool gra::solvable(){
 
 
     if(size==3){
-        if(ilosc_zmian%2==0)return true;
+        if(ilosc_zmian%2==0){is=true;return true;}
     else
-         return false;}
+        {is=false; return false;}}
 
     if(size==4){
-        if (size & 1)
-               return !(ilosc_zmian & 1);
+        if (size & 1){
+               is=!(ilosc_zmian & 1);
+               return !(ilosc_zmian & 1);}
 
-           else     // grid is even
+           else
            {
 
-               if (x & 1)
-                   return !(ilosc_zmian & 1);
-               else
-                   return ilosc_zmian & 1;
+               if (x & 1){
+                   is=!(ilosc_zmian & 1);
+                   return !(ilosc_zmian & 1);}
+               else{
+                   is=ilosc_zmian & 1;
+                   return ilosc_zmian & 1;}
            }
 
         }
@@ -197,45 +218,50 @@ void gra::print_menu(){
     cout<<"k - Zakoncz gre"<<endl;
 }
 
-void gra::play_game(){
-    system("cls");
-    print_tab();
-    AS W(tab,goal,size);
-    int pom;
+void gra::save_solution(string nazwa){
+    if(W!=NULL){
+        ofstream plik;
+        plik.open(nazwa.c_str());
+        int **tablica=new int *[size];
+        for(int i=0;i<size;i++){
+            tablica[i]=new int[size];
+        }
+        for(int i=0;i<size;i++){
+            for(int j=0;j<size;j++){
+                tablica[i][j]=tab[i][j];
+            }
+        }
 
-    if(!solvable()){cout<<endl<<"nie da sie rozwiazac";
-    }else{
-        int czas=0;
-        cout<<endl;
-        print_menu();
-        char ruch;
-        while(ruch!='k'){
-            cin>>ruch;
-            if(ruch=='w'){up_tab();}
-            if(ruch=='s'){down_tab();}
-            if(ruch=='a'){left_tab();}
-            if(ruch=='d'){right_tab();}
-            if(ruch=='p'){
-clock_t start = clock();
-                W.status(tab);
-                pom=W.hint();
-                czas = clock() - start;
-                if(pom==2){up_tab();}
-                if(pom==3){down_tab();}
-                if(pom==0){left_tab();}
-                if(pom==1){right_tab();}
-                if(pom==5){cout<<"brak:"<<endl;}
+        do{
+            for(int i=0;i<size;i++){
+                for(int j=0;j<size;j++){
+                    plik<<setw(3)<<tab[i][j];
+                }if(i!=size)plik<<endl;
+            }
+            W->status(tab);
+            if(W->hint()!=5){
+                plik<<endl;
+                plik<<"      |       "<<endl;
+                plik<<"      |       "<<endl;
+                plik<<"    __|__     "<<endl;
+                plik<<"    |||||     "<<endl;
+                plik<<"     |||      "<<endl;
+                plik<<"      |      "<<endl;
+                plik<<endl;
 
             }
-            if(ruch=='r'){rand_tab();}
-           system("cls");
-             printf( "Czas wykonywania: %lu ms\n",czas);
-            print_tab();
-            cout<<endl;
-            print_menu();
+             hint_tab();
+
+
 
 
         }
+        while(W->hint()!=5);
 
+
+
+    plik.close();
+    wczytaj_tab(tablica,size);
     }
 }
+

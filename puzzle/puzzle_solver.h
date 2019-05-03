@@ -17,6 +17,7 @@ class astar{
     astar *parent;
     astar *next;
 
+
 public:
     astar(int **,int,astar * =NULL);
     ~astar();
