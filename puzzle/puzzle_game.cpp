@@ -143,6 +143,21 @@ void gra::hint_tab(){
 }
 
 bool gra::solvable(){
+    bool pom3=true;
+    bool *pom2=new bool[size*size];
+    for(int i=0;i<size*size;i++){
+        pom2[i]=false;
+    }
+    for(int i=0;i<size;i++){
+        for(int j=0;j<size;j++){
+            if(tab[i][j]<size*size and tab[i][j]>=0){pom2[tab[i][j]]=true;}
+        }
+    }
+    for(int i=0;i<size*size;i++){
+        if(pom2[i]==false)pom3=false;
+    }
+    delete []pom2;
+    if(pom3==false) {is=false;return pom3;}
 
     int *pom=new int [size*size];
     int ilosc_zmian=0;
