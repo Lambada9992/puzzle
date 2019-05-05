@@ -5,8 +5,8 @@ using namespace std;
 
 ////////////STRUKTURA////////
 lista::lista(astar *elem,int N){
-    next=nullptr;
-    down=nullptr;
+    next=NULL;
+    down=NULL;
     key=N;
     element=elem;
 
@@ -16,12 +16,12 @@ lista::lista(astar *elem,int N){
 
 ///////////////|PQ\/////////////
 PQ_lista::PQ_lista(){
-    H=nullptr;
+    H=NULL;
 }
 
 
 void PQ_lista::insert(astar *x,int N){
-    if(H==nullptr){
+    if(H==NULL){
         H=new lista(x,N);
   }
     else{
@@ -33,14 +33,14 @@ void PQ_lista::insert(astar *x,int N){
         }else{if(H->key==N){
                 new_node->next=H;
                 new_node->down=H->down;
-                H->down=nullptr;
+                H->down=NULL;
                 H=new_node;
             }
         else{
             lista *pom=H;
-            while(pom!=nullptr){
+            while(pom!=NULL){
 
-                if(pom->down==nullptr){
+                if(pom->down==NULL){
                     pom->down=new_node;
 
                     break;
@@ -50,7 +50,7 @@ void PQ_lista::insert(astar *x,int N){
 
                   new_node->next=pom->down;
                   new_node->down=pom->down->down;
-                  pom->down->down=nullptr;
+                  pom->down->down=NULL;
                   pom->down=new_node;
                   break;}
 
@@ -73,14 +73,14 @@ void PQ_lista::insert(astar *x,int N){
 astar *PQ_lista::extract_min(){
 
 
-    if(H==nullptr)return nullptr;
+    if(H==NULL)return NULL;
     lista*pom=H;
 
-    if(H->next!=nullptr){
+    if(H->next!=NULL){
         H->next->down=H->down;
         H=H->next;
-        pom->next=nullptr;
-        pom->down=nullptr;
+        pom->next=NULL;
+        pom->down=NULL;
         astar *pom2=pom->element;
         delete pom;
         return pom2;
@@ -88,8 +88,8 @@ astar *PQ_lista::extract_min(){
     else{
         H=H->down;
         astar *pom2=pom->element;
-        pom->next=nullptr;
-        pom->down=nullptr;
+        pom->next=NULL;
+        pom->down=NULL;
         delete pom;
         return pom2;
     }
@@ -97,7 +97,7 @@ astar *PQ_lista::extract_min(){
 
 }
 astar *PQ_lista::min(){
-    if(H==nullptr){return nullptr;}else
+    if(H==NULL){return NULL;}else
    {
         return H->element;
    }

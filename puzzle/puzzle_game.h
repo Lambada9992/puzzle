@@ -12,9 +12,10 @@ class gra{
     int **goal;
     int x;
     int y;
-    bool is;
     AS *W;
-
+public:
+    bool is;
+private:
 
     //dzialanie//
 
@@ -36,7 +37,7 @@ public:
     ~gra();
     //wyswietlanie//
     void print_tab();
-    void print_menu();
+
 
 
 

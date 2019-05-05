@@ -73,7 +73,7 @@ void gra::print_tab(){
         for(int j=0;j<size;j++){
             cout<<"|"<<setw(2)<<tab[i][j];
         }cout<<"|"<<endl;if(i<size-1){
-            for(int k=0;k<size;k++){cout<<"---";}cout<<endl;}
+            for(int k=0;k<size;k++){cout<<"---";}cout<<"-"<<endl;}
     }
     cout<<endl;
 }
@@ -131,13 +131,14 @@ void gra::down_tab(){
 }
 
 void gra::hint_tab(){
-    if(W!=NULL){
+    if(W!=NULL){if(is){
     W->status(tab);
     int pom=W->hint();
     if(pom==2){up_tab();}
     if(pom==3){down_tab();}
     if(pom==0){left_tab();}
     if(pom==1){right_tab();}
+        }
     }
 }
 
@@ -208,18 +209,10 @@ bool gra::compare_tab(int **tab1,int **tab2){
     }return g_state;
 }
 
-void gra::print_menu(){
-    cout<<"w - ruch do gory"<<endl;
-    cout<<"s - ruch do dolu"<<endl;
-    cout<<"a - ruch w lewo"<<endl;
-    cout<<"d - ruch w prawo"<<endl;
-    cout<<"p - podpowiedz"<<endl;
-    cout<<"r - Randomize"<<endl;
-    cout<<"k - Zakoncz gre"<<endl;
-}
+
 
 void gra::save_solution(string nazwa){
-    if(W!=NULL){
+    if(W!=NULL){if(is){
         ofstream plik;
         plik.open(nazwa.c_str());
         int **tablica=new int *[size];
@@ -262,6 +255,6 @@ void gra::save_solution(string nazwa){
 
     plik.close();
     wczytaj_tab(tablica,size);
-    }
+    }}
 }
 

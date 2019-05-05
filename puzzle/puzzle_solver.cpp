@@ -7,13 +7,6 @@
 using namespace std;
 
 //////////////////////////////astar/////////////////////////////////
-void astar::print_tab(){cout<<endl;
-    for(int i=0;i<size;i++){
-        for(int j=0;j<size;j++){
-            cout<<" "<<tab[i][j];
-        }cout<<endl;
-    }cout<<endl;
-}
 
 astar::astar(int **tablica,int N,astar *rodzic){
     size=N;
@@ -113,6 +106,7 @@ void astar::manhattan(int **goal){
         }
 
         h= wynik;
+
     }
 bool astar::compare_tab(astar *goal){
     if(h!=goal->h)return false;
@@ -159,7 +153,7 @@ delete podpowiedz;
 void AS::solve(){
 
     PQ_lista open;    
-    astar *****hash_list=make_hash();
+    astar ******hash_list=make_hash();
 
 
     astar *first=new astar(tab,size);
@@ -244,7 +238,7 @@ void AS::solve(){
 
 }
 
-bool AS::child(astar *&d, astar *****hash_list){
+bool AS::child(astar *&d, astar ******hash_list){
  if(!exist_hash(d,hash_list)){
        return true;
     }else{
@@ -328,14 +322,17 @@ void AS::status(int **X){
 
 /////////////////////hash list///////////////////////////
 
-astar *****AS::make_hash(){
-    astar***** tab=new astar****[((size+size)-1)*((size*size)-1)];
+astar ******AS::make_hash(){
+    astar****** tab=new astar*****[((size+size)-1)*((size*size)-1)];
     for(int i=0;i<((size+size)-1)*((size*size)-1);i++){
-        tab[i]=new astar***[size];
+        tab[i]=new astar****[size];
         for(int j=0;j<size;j++){
-            tab[i][j]=new astar**[size];
+            tab[i][j]=new astar***[size];
             for(int k=0;k<size;k++){
-                tab[i][j][k]=new astar*[size*size];
+                tab[i][j][k]=new astar**[size*size];
+                for(int l=0;l<size*size;l++){
+                    tab[i][j][k][l]=new astar *[size*size];
+                }
             }
 
         }
@@ -344,7 +341,12 @@ astar *****AS::make_hash(){
         for(int j=0;j<size;j++){
             for(int k=0;k<size;k++){
                 for(int l=0;l<size*size;l++){
-                tab[i][j][k][l]=NULL;}
+                    for(int m=0;m<size*size;m++){
+
+                        tab[i][j][k][l][m]=NULL;
+                    }
+
+                }
             }
         }
     }
@@ -353,7 +355,7 @@ astar *****AS::make_hash(){
 }
 
 
-void AS::delete_hash(astar *****&tab){
+void AS::delete_hash(astar ******&tab){
 
 
 
@@ -362,7 +364,10 @@ void AS::delete_hash(astar *****&tab){
         for(int j=0;j<size;j++){
             for(int k=0;k<size;k++){
                 for(int l=0;l<size*size;l++){
-                    delete tab[i][j][k][l];
+                    for(int m=0;m<size*size;m++){
+                        delete tab[i][j][k][l][m];
+                    }
+                    delete []tab[i][j][k][l];
                 }
                 delete [] tab[i][j][k];
             }
@@ -375,29 +380,31 @@ void AS::delete_hash(astar *****&tab){
 }
 
 
-void AS::add_hash(astar *X,astar *****&tab){
+void AS::add_hash(astar *X,astar ******&tab){
     int i=X->h;
     int j=X->x;
     int k=X->y;
     int l=X->tab[0][0];
+    int m=X->tab[size-1][size-1];
 
-    if(tab[i][j][k][l]==NULL){
-        tab[i][j][k][l]=X;
+    if(tab[i][j][k][l][m]==NULL){
+        tab[i][j][k][l][m]=X;
     }else{
-        X->next=tab[i][j][k][l];
-        tab[i][j][k][l]=X;
+        X->next=tab[i][j][k][l][m];
+        tab[i][j][k][l][m]=X;
     }
 
 }
 
 
-bool AS::exist_hash(astar *X,astar *****&tab){
+bool AS::exist_hash(astar *X,astar ******&tab){
     int i=X->h;
     int j=X->x;
     int k=X->y;
     int l=X->tab[0][0];
-    if(tab[i][j][k][l]==NULL){return false;}
-    astar *pom=tab[i][j][k][l];
+    int m=X->tab[size-1][size-1];
+    if(tab[i][j][k][l][m]==NULL){return false;}
+    astar *pom=tab[i][j][k][l][m];
     while(pom!=NULL){
         if(pom->compare_tab(X)){return true;}
         pom=pom->next;
