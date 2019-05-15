@@ -270,6 +270,13 @@ void gra::save_solution(string nazwa){
 
     plik.close();
     wczytaj_tab(tablica,size);
+    for(int i=0;i<size;i++){
+        delete []tablica[i];
+
+    }
+    delete []tablica;
+
+
     }}
 }
 
