@@ -46,10 +46,10 @@ void gra::wczytaj_tab(int **tablica,int N){
         tab=new int*[size];
         goal=new int*[size];
         for(int i=0;i<size;i++){
-            for(int j=0;j<size;j++){
+
                 tab[i]=new int[size];
                 goal[i]=new int[size];
-            }
+
         }
         int counter=1;
         for(int i=0;i<size;i++){
