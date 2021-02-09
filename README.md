@@ -57,15 +57,15 @@ After initializating starting board the main board of the game and menu will be 
 
 ##### Translation of options in menu: 
 
-"w - Ruch do gory" -- move empty tile up
-"s - Ruch do dolu" -- move empty tile down
-"a - Ruch w lewo" -- move empty tile left
-"d - Ruch w prawo" -- move empty tile right
-"p - Podpowiedz" -- hint option(make one move)
-"r - Randomize" -- randomize the board
-"y - Zapisz rozwiazanie do pliku o podanej nazwie" -- save the sollution of courrent state into a file
-"u - Wczytaj ponowinie gre" -- chose game mode and intit the starting board again
-"k - Zakoncz gre" -- quit app
+"w - Ruch do gory" -- move empty tile up<br>
+"s - Ruch do dolu" -- move empty tile down<br>
+"a - Ruch w lewo" -- move empty tile left<br>
+"d - Ruch w prawo" -- move empty tile right<br>
+"p - Podpowiedz" -- hint option(make one move)<br>
+"r - Randomize" -- randomize the board<br>
+"y - Zapisz rozwiazanie do pliku o podanej nazwie" -- save the sollution of courrent state into a file<br>
+"u - Wczytaj ponowinie gre" -- chose game mode and intit the starting board again<br>
+"k - Zakoncz gre" -- quit app<br>
 
 
 
