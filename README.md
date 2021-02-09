@@ -1,5 +1,9 @@
 # Puzzle (Terminal version) 
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/49727204/107408875-d5c1eb00-6b0b-11eb-99be-8527eae6a681.gif">
+</p>
+
 ### O grze
 
 Puzzle jest to układanka polegająca na ustawieniu pól w odpowiedniej kombinacji. Jedno pole jest puste(pole oznaczone cyfrą - 0) umożliwiając wykonywanie ruchów w układance.
